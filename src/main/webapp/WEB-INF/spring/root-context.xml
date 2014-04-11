@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+	">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+
+<security:http pattern="/resources/**" security="none" />
+<security:http auto-config="true" use-expressions="true">
+    <security:intercept-url pattern="/" access="permitAll" />
+    <security:intercept-url pattern="/login" access="permitAll" />
+    <security:intercept-url pattern="/logout" access="permitAll" />
+    <security:intercept-url pattern="/accessdenied" access="permitAll" />
+    <security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+    <security:form-login />
+    <security:logout logout-success-url="/" />
+    <!-- <session-management invalid-session-url="/loginlimmit">
+        <concurrency-control error-if-maximum-exceeded="true"
+            max-sessions="1" />
+    </session-management> -->
+</security:http>
+
+<security:authentication-manager>
+    <!--  Simple demo, user/pw = a/a, not using database -->
+    <!--  Using database -->
+    <security:authentication-provider>
+        <security:user-service>
+            <security:user name="a" password="a" authorities="ROLE_USER" />
+        </security:user-service>
+    </security:authentication-provider>
+</security:authentication-manager>
+
+
+<!-- <bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+  <property name="userDetailsService" ref="mySpringSecurityUserDetailsService"/>
+   <property name="saltSource" ref="saltSource"/>
+  <property name="passwordEncoder" ref="passwordEncoder"/>
+</bean>
+ -->
+</beans>
+
